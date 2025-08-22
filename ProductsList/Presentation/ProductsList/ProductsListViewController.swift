@@ -20,6 +20,16 @@ final class ProductsListViewController: UIViewController {
     }
     
     @objc private func navigate() {
-        responder?.navigateToProductDetails()
+//        responder?.navigateToProductDetails()
+        
+        let startTime = CFAbsoluteTimeGetCurrent()
+
+        let reader = PlistReader()
+        let transactions: [TransactionDTO] = (try? reader.read(file: "transaction")) ?? []
+        print(transactions)
+        print(transactions.count)
+
+        let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
+        print("⏱️ Time elapsed: \(timeElapsed * 1000) ms")
     }
 }
