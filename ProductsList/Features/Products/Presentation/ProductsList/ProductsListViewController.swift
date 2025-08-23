@@ -20,6 +20,6 @@ final class ProductsListViewController: UIViewController {
     }
     
     @objc private func navigate() {
-        
+        responder?.navigateToProductDetails()
     }
 }

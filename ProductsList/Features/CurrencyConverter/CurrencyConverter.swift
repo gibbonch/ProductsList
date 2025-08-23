@@ -15,13 +15,6 @@ final class CurrencyConverter: CurrencyConverterProtocol {
         memo.removeAll()
     }
     
-    func setBaseCurrency(_ currency: CurrencyCode) {
-        guard NSLocale.isoCurrencyCodes.contains(currency) else {
-            return
-        }
-        baseCurrency = currency
-    }
-    
     func convert(from amount: Amount, to currency: CurrencyCode) throws -> Amount {
         guard amount.value >= 0 else {
             throw CurrencyConverterError.invalidAmount

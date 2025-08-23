@@ -1,3 +1,3 @@
-protocol CoordinatorProtocol {
+protocol Coordinator: AnyObject {
     func start()
 }

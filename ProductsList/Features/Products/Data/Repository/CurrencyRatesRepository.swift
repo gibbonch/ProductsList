@@ -5,7 +5,7 @@ final class CurrencyRatesRepository: CurrencyRatesRepositoryProtocol {
     private static let file = "rates"
     
     private let plistReader: PlistReaderProtocol
-    private var cache: [CurrencyRate] = []
+    private var currencyRates: [CurrencyRate] = []
     private var initializationError: Error?
     
     init(plistReader: PlistReaderProtocol = PlistReader()) {
@@ -17,7 +17,7 @@ final class CurrencyRatesRepository: CurrencyRatesRepositoryProtocol {
         if let initializationError {
             return .failure(initializationError)
         }
-        return .success(cache)
+        return .success(currencyRates)
     }
     
     private func initializeData() {
@@ -27,7 +27,7 @@ final class CurrencyRatesRepository: CurrencyRatesRepositoryProtocol {
                 CurrencyRateMapper.mapToDomain(dto: dto)
             }
             
-            self.cache = rates
+            self.currencyRates = rates
             
         } catch {
             initializationError = error

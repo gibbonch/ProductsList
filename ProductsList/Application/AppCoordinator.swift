@@ -1,43 +1,33 @@
 import UIKit
 
-final class AppCoordinator: CoordinatorProtocol {
+final class AppCoordinator: Coordinator {
     
-    // MARK: - Private Properties
+    private let window: UIWindow
+    private var childCoordinators: [Coordinator] = []
     
-    private let navigationController: UINavigationController
-//    private var diContainer: DIContainer?
-    
-    // MARK: - Lifecycle
-    
-    init(navigationController: UINavigationController) {
-        self.navigationController = navigationController
+    init(window: UIWindow) {
+        self.window = window
     }
-    
-    // MARK: - Internal Methods
     
     func start() {
-        routeToProductsList()
+        routeToSplashScreen()
     }
     
-    // MARK: - Private Methods
-    
-    private func routeToProductsList() {
-        let vc = ProductsListViewController()
-        vc.responder = self
-        navigationController.setViewControllers([vc], animated: false)
+    private func routeToSplashScreen() {
+        let splashViewController = SplashViewController()
+        window.rootViewController = splashViewController
+        window.makeKeyAndVisible()
     }
     
-    private func routeToProductTransactions() {
-        let vc = ProductTransactionsViewController()
-        navigationController.pushViewController(vc, animated: true)
-    }
-}
-
-// MARK: - ProductListNavigationResponder
-
-extension AppCoordinator: ProductListNavigationResponder {
-    
-    func navigateToProductDetails() {
-        routeToProductTransactions()
+    private func routeToProducts() {
+        let navigationController = UINavigationController()
+        window.rootViewController = navigationController
+        
+        let productsCoordinator = ProductsCoordinator(
+            navigationController: navigationController
+        )
+        childCoordinators.append(productsCoordinator)
+        
+        productsCoordinator.start()
     }
 }

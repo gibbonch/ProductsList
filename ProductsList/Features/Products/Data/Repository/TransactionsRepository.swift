@@ -5,7 +5,7 @@ final class TransactionsRepository: TransactionsRepositoryProtocol {
     private static let file = "transactions"
     
     private let plistReader: PlistReaderProtocol
-    private var cache: [Transaction] = []
+    private var transactions: [Transaction] = []
     private var initializationError: Error?
     
     init(plistReader: PlistReaderProtocol = PlistReader()) {
@@ -17,7 +17,7 @@ final class TransactionsRepository: TransactionsRepositoryProtocol {
         if let initializationError {
             return .failure(initializationError)
         }
-        return .success(cache)
+        return .success(transactions)
     }
     
     func fetchTransactions(with sku: Sku) -> Result<[Transaction], any Error> {
@@ -25,22 +25,22 @@ final class TransactionsRepository: TransactionsRepositoryProtocol {
             return .failure(initializationError)
         }
         
-        guard cache.map(\.sku).contains(sku) else {
+        guard transactions.map(\.sku).contains(sku) else {
             return .failure(TransactionsRepositoryError.invalidSku)
         }
         
-        let filteredTransactions = cache.filter { $0.sku == sku }
+        let filteredTransactions = transactions.filter { $0.sku == sku }
         return .success(filteredTransactions)
     }
     
     private func initializeData() {
         do {
             let transactionsDTOs = try plistReader.read(file: Self.file, as: [TransactionDTO].self)
-            let transactions = transactionsDTOs.compactMap { dto in
+            let mappedTransactions = transactionsDTOs.compactMap { dto in
                 TransactionMapper.mapToDomain(dto: dto)
             }
             
-            self.cache = transactions
+            self.transactions = mappedTransactions
             
         } catch {
             initializationError = error
