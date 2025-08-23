@@ -1,6 +1,6 @@
 import UIKit
 
-final class AppCoordinator: Coordinator {
+final class AppCoordinator: CoordinatorProtocol {
     
     // MARK: - Private Properties
     
@@ -27,8 +27,8 @@ final class AppCoordinator: Coordinator {
         navigationController.setViewControllers([vc], animated: false)
     }
     
-    private func routeToProductDetails() {
-        let vc = ProductDetailsViewController()
+    private func routeToProductTransactions() {
+        let vc = ProductTransactionsViewController()
         navigationController.pushViewController(vc, animated: true)
     }
 }
@@ -38,6 +38,6 @@ final class AppCoordinator: Coordinator {
 extension AppCoordinator: ProductListNavigationResponder {
     
     func navigateToProductDetails() {
-        routeToProductDetails()
+        routeToProductTransactions()
     }
 }

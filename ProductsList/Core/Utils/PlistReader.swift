@@ -1,28 +1,25 @@
 import Foundation
 
-final class PlistReader {
+protocol PlistReaderProtocol {
+    func read<T: Decodable>(file: String, as type: T.Type) throws -> T
+}
+
+final class PlistReader: PlistReaderProtocol {
     
-    enum Error: Swift.Error {
-        case fileNotFound
-    }
-    
-    private let bundle: Bundle
-    private let decoder: PropertyListDecoder
-    
-    init(bundle: Bundle = .main, decoder: PropertyListDecoder = PropertyListDecoder()) {
-        self.bundle = bundle
-        self.decoder = decoder
-    }
-    
-    func read<T: Decodable>(file: String) throws -> [T] {
-        guard let url = bundle.url(forResource: file, withExtension: "plist") else {
-            throw Error.fileNotFound
+    func read<T: Decodable>(file: String, as type: T.Type) throws -> T {
+        guard let url = Bundle.main.url(forResource: file, withExtension: "plist") else {
+            throw PlistReaderError.fileNotFound
         }
         guard let data = try? Data(contentsOf: url),
-              let decodedData = try? decoder.decode([T].self, from: data)
+              let decodedData = try? PropertyListDecoder().decode(T.self, from: data)
         else {
-            return []
+            throw PlistReaderError.decodingFailed
         }
         return decodedData
     }
+}
+
+enum PlistReaderError: Error {
+    case fileNotFound
+    case decodingFailed
 }

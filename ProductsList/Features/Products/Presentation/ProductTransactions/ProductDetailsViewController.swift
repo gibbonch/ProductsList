@@ -1,6 +1,6 @@
 import UIKit
 
-final class ProductDetailsViewController: UIViewController {
+final class ProductTransactionsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
