@@ -3,14 +3,22 @@ import UIKit
 final class AppCoordinator: Coordinator {
     
     private let window: UIWindow
+    private let diContainer: DIContainerProtocol
     private var childCoordinators: [Coordinator] = []
     
-    init(window: UIWindow) {
+    init(window: UIWindow, diContainer: DIContainerProtocol) {
         self.window = window
+        self.diContainer = diContainer
     }
     
     func start() {
         routeToSplashScreen()
+        
+        let productsDIContainer = DIContainer()
+        productsDIContainer.parent = diContainer
+        ProductsAssembly.assemble(diContainer: productsDIContainer) { [weak self] in
+            self?.routeToProducts(diContainer: productsDIContainer)
+        }
     }
     
     private func routeToSplashScreen() {
@@ -19,15 +27,16 @@ final class AppCoordinator: Coordinator {
         window.makeKeyAndVisible()
     }
     
-    private func routeToProducts() {
+    private func routeToProducts(diContainer: DIContainerProtocol) {
         let navigationController = UINavigationController()
-        window.rootViewController = navigationController
         
         let productsCoordinator = ProductsCoordinator(
-            navigationController: navigationController
+            navigationController: navigationController,
+            diContainer: diContainer
         )
         childCoordinators.append(productsCoordinator)
-        
         productsCoordinator.start()
+        
+        window.rootViewController = navigationController
     }
 }

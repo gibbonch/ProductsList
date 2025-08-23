@@ -3,9 +3,11 @@ import UIKit
 final class ProductsCoordinator: Coordinator {
     
     private let navigationController: UINavigationController
+    private let diContainer: DIContainerProtocol
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, diContainer: DIContainerProtocol) {
         self.navigationController = navigationController
+        self.diContainer = diContainer
     }
     
     func start() {
@@ -13,13 +15,15 @@ final class ProductsCoordinator: Coordinator {
     }
     
     private func routeToProductsList() {
-        let vc = ProductsListViewController()
+        let useCase = diContainer.resolve(GetProductSummariesUseCaseProtocol.self)!
+        let vc = ProductsListViewController(getProductSummariesUseCase: useCase)
         vc.responder = self
         navigationController.setViewControllers([vc], animated: false)
     }
     
     private func routeToProductTransactions() {
-        let vc = ProductTransactionsViewController()
+        let useCase = diContainer.resolve(GetProductUseCaseProtocol.self)!
+        let vc = ProductTransactionsViewController(useCase: useCase)
         navigationController.pushViewController(vc, animated: true)
     }
 }

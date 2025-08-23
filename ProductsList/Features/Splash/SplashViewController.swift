@@ -2,8 +2,9 @@ import UIKit
 
 final class SplashViewController: UIViewController {
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .red
+    private lazy var splashView = SplashView()
+    
+    override func loadView() {
+        view = splashView
     }
 }
