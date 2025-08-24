@@ -6,7 +6,13 @@ final class CurrencyConverter: CurrencyConverterProtocol {
     
     private var memo: [String: Double] = [:]
     private var rates: [CurrencyRate] = []
-    private var baseCurrency: CurrencyCode = CurrencyEnvironment.crossRate.rawValue
+    private var crossRateCurrency: CurrencyCode
+    
+    // MARK: - Lifecycle
+    
+    init(crossRateCurrency: CurrencyCode = CurrencyEnvironment.crossRate.rawValue) {
+        self.crossRateCurrency = crossRateCurrency
+    }
     
     // MARK: - Internal Methods
     
@@ -57,8 +63,8 @@ final class CurrencyConverter: CurrencyConverterProtocol {
     }
     
     private func findCrossRate(from: CurrencyCode, to: CurrencyCode) -> Double? {
-        guard let rateToBase = findDirectRate(from: from, to: baseCurrency),
-              let rateFromBase = findDirectRate(from: baseCurrency, to: to) else {
+        guard let rateToBase = findDirectRate(from: from, to: crossRateCurrency),
+              let rateFromBase = findDirectRate(from: crossRateCurrency, to: to) else {
             return nil
         }
         return rateToBase * rateFromBase
