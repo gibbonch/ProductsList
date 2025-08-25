@@ -10,12 +10,13 @@ final class ProductsListView: UIView {
         didSet { tableView.delegate = tableViewDelegate }
     }
     
-    private(set) lazy var tableView: UITableView = {
+    private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.dataSource = tableViewDataSource
         tableView.delegate = tableViewDelegate
         tableView.register(TwoColumnTableViewCell.self, forCellReuseIdentifier: TwoColumnTableViewCell.reuseIdentifier)
         tableView.backgroundColor = .clear
+        tableView.tableHeaderView = UIView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
@@ -23,8 +24,10 @@ final class ProductsListView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        setupConstraints()
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) { fatalError() }
     
     func reloadData() {
@@ -34,7 +37,9 @@ final class ProductsListView: UIView {
     private func setupUI() {
         backgroundColor = Colors.backgroundSecondary
         addSubview(tableView)
+    }
+    
+    private func setupConstraints() {
         tableView.fillSuperview()
-        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
     }
 }

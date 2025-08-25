@@ -35,17 +35,15 @@ final class ProductsListViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        title = Strings.Products.Summaries.title
+        title = viewModel.title
         navigationController?.navigationBar.tintColor = Colors.accentBlue
     }
     
     private func bindViewModel() {
-        viewModel.summaries
-            .sink { [weak self] summaries in
-                self?.summaries = summaries
-                self?.productsListView.reloadData()
-            }
-            .store(in: &cancellables)
+        viewModel.summaries.sink { [weak self] summaries in
+            self?.summaries = summaries
+            self?.productsListView.reloadData()
+        }.store(in: &cancellables)
     }
 }
 

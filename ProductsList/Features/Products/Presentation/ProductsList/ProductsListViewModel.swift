@@ -2,6 +2,7 @@ import Foundation
 import Combine
 
 protocol ProductsListViewModelProtocol {
+    var title: String { get }
     var summaries: AnyPublisher<[ProductSummaryUIModel], Never> { get }
     func viewLoaded()
     func cellSelected(at indexPath: IndexPath)
@@ -10,6 +11,8 @@ protocol ProductsListViewModelProtocol {
 final class ProductsListViewModel: ProductsListViewModelProtocol {
     
     weak var responder: ProductListNavigationResponder?
+    
+    let title = Strings.Products.Summaries.title
     
     var summaries: AnyPublisher<[ProductSummaryUIModel], Never> {
         summariesSubject

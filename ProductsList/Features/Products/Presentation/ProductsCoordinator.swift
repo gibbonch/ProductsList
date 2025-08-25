@@ -22,10 +22,11 @@ final class ProductsCoordinator: Coordinator {
         navigationController.setViewControllers([viewController], animated: false)
     }
     
-    private func routeToProductTransactions() {
+    private func routeToProductTransactions(with sku: Sku) {
         let useCase = diContainer.resolve(GetProductUseCaseProtocol.self)!
-        let vc = ProductTransactionsViewController(useCase: useCase)
-        navigationController.pushViewController(vc, animated: true)
+        let viewModel = ProductTransactionsViewModel(sku: sku, useCase: useCase)
+        let viewController = ProductTransactionsViewController(viewModel: viewModel)
+        navigationController.pushViewController(viewController, animated: true)
     }
 }
 
@@ -34,7 +35,7 @@ final class ProductsCoordinator: Coordinator {
 extension ProductsCoordinator: ProductListNavigationResponder {
     
     func navigateToProductDetails(with sku: Sku) {
-        routeToProductTransactions()
+        routeToProductTransactions(with: sku)
     }
 }
 
