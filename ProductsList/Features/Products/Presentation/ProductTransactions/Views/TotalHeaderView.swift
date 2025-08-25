@@ -25,7 +25,9 @@ final class TotalHeaderView: UITableViewHeaderFooterView {
     }
     
     private func setupUI() {
-        backgroundColor = Colors.backgroundSecondary
+        let view = UIView()
+        view.backgroundColor = Colors.backgroundSecondary
+        backgroundView = view
         addSubview(label)
     }
     

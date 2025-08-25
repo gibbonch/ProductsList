@@ -51,6 +51,8 @@ final class AppCoordinator: Coordinator {
             .font: Typography.title
         ]
         
+        appearance.shadowColor = Colors.gray
+        
         let navigationBar = UINavigationBar.appearance()
         navigationBar.standardAppearance = appearance
         navigationBar.scrollEdgeAppearance = appearance
