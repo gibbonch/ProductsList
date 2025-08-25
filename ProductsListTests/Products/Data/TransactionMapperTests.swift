@@ -1,7 +1,7 @@
 import XCTest
 @testable import ProductsList
 
-final class ProductsListTests: XCTestCase {
+final class TransactionMapperTests: XCTestCase {
     
     func testMapToDomain_returnsDomainModel_whenValidDTO() {
         // Given

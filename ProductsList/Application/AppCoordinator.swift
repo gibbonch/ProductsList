@@ -58,5 +58,4 @@ final class AppCoordinator: Coordinator {
         navigationBar.scrollEdgeAppearance = appearance
         navigationBar.compactAppearance = appearance
     }
-    
 }
