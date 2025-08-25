@@ -15,9 +15,8 @@ final class ProductsCoordinator: Coordinator {
     }
     
     private func routeToProductsList() {
-        let useCase = diContainer.resolve(GetProductSummariesUseCaseProtocol.self)!
-        let vc = ProductsListViewController(getProductSummariesUseCase: useCase)
-        vc.responder = self
+        let vc = ProductsListViewController()
+        vc.title = Strings.Products.Summaries.title
         navigationController.setViewControllers([vc], animated: false)
     }
     

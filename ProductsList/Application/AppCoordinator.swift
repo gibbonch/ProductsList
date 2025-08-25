@@ -28,6 +28,7 @@ final class AppCoordinator: Coordinator {
     }
     
     private func routeToProducts(diContainer: DIContainerProtocol) {
+        setupNavigationBar()
         let navigationController = UINavigationController()
         
         let productsCoordinator = ProductsCoordinator(
@@ -39,4 +40,21 @@ final class AppCoordinator: Coordinator {
         
         window.rootViewController = navigationController
     }
+    
+    private func setupNavigationBar() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = Colors.backgroundSecondary
+        
+        appearance.titleTextAttributes = [
+            .foregroundColor: Colors.textPrimary,
+            .font: Typography.title
+        ]
+        
+        let navigationBar = UINavigationBar.appearance()
+        navigationBar.standardAppearance = appearance
+        navigationBar.scrollEdgeAppearance = appearance
+        navigationBar.compactAppearance = appearance
+    }
+    
 }

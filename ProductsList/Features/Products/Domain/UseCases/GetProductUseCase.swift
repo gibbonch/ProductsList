@@ -6,15 +6,11 @@ protocol GetProductUseCaseProtocol {
 
 final class GetProductUseCase: GetProductUseCaseProtocol {
     
-    // MARK: - Private Properties
-    
     private let transactionsRepository: TransactionsRepositoryProtocol
     private let currencyRatesRepository: CurrencyRatesRepositoryProtocol
     private let currencyConverter: CurrencyConverterProtocol
     
     private let targetCurrency: CurrencyCode = CurrencyEnvironment.base.rawValue
-    
-    // MARK: - Lifecycle
     
     init(
         transactionsRepository: TransactionsRepositoryProtocol,
@@ -25,8 +21,6 @@ final class GetProductUseCase: GetProductUseCaseProtocol {
         self.currencyRatesRepository = currencyRatesRepository
         self.currencyConverter = currencyConverter
     }
-    
-    // MARK: - Internal Methods
     
     func execute(with sku: Sku, completion: @escaping (Result<Product, any Error>) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
@@ -53,8 +47,6 @@ final class GetProductUseCase: GetProductUseCaseProtocol {
             }
         }
     }
-    
-    // MARK: - Private Methods
     
     private func convertTransactions(_ transactions: [Transaction]) -> [CurrencyConversion] {
         var conversions: [CurrencyConversion] = []

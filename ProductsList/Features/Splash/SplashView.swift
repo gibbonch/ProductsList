@@ -4,8 +4,8 @@ final class SplashView: UIView {
     
     private lazy var label: UILabel = {
         let label = UILabel()
-        label.text = "Products List"
-        label.font = .systemFont(ofSize: 32, weight: .bold)
+        label.text = Strings.Splash.title
+        label.font = Typography.largeTitle
         label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -21,7 +21,7 @@ final class SplashView: UIView {
     required init?(coder: NSCoder) { fatalError() }
     
     private func setupUI() {
-        backgroundColor = .white
+        backgroundColor = Colors.backgroundPrimary
         addSubview(label)
     }
     

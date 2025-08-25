@@ -1,0 +1,8 @@
+// MARK: - Splash
+"splash.title" = "Products List";
+
+// MARK: - Products
+"products.summaries.title" = "Products";
+"products.summaries.transactions" = "%d transactions";
+"products.transactions.title" = "Transactions for %@";
+"products.transactions.total" = "Total: %@";

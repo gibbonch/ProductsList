@@ -2,19 +2,13 @@ import Foundation
 
 final class CurrencyConverter: CurrencyConverterProtocol {
     
-    // MARK: - Private Properties
-    
     private var memo: [String: Double] = [:]
     private var rates: [CurrencyRate] = []
     private var crossRateCurrency: CurrencyCode
     
-    // MARK: - Lifecycle
-    
     init(crossRateCurrency: CurrencyCode = CurrencyEnvironment.crossRate.rawValue) {
         self.crossRateCurrency = crossRateCurrency
     }
-    
-    // MARK: - Internal Methods
     
     func loadRates(_ rates: [CurrencyRate]) {
         self.rates = rates
@@ -35,8 +29,6 @@ final class CurrencyConverter: CurrencyConverterProtocol {
         
         return Amount(value: convertedValue, code: currency)
     }
-    
-    // MARK: - Private Methods
     
     private func findConversionRate(from: CurrencyCode, to: CurrencyCode) throws -> Double {
         let memoKey = "\(from)-\(to)"

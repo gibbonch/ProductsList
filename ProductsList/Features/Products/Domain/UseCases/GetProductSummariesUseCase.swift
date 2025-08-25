@@ -25,7 +25,6 @@ final class GetProductSummariesUseCase: GetProductSummariesUseCaseProtocol {
                 completion(.failure(error))
             }
         }
-        
     }
     
     private func mapToProductSummaries(_ transactions: [Transaction]) -> [ProductSummary] {

@@ -2,11 +2,17 @@ import UIKit
 
 final class ProductsListViewController: UIViewController {
     
-    weak var responder: ProductListNavigationResponder?
-    private let getProductSummariesUseCase: GetProductSummariesUseCaseProtocol
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(TwoColumnTableViewCell.self, forCellReuseIdentifier: TwoColumnTableViewCell.reuseIdentifier)
+        tableView.backgroundColor = .clear
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
     
-    init(getProductSummariesUseCase: GetProductSummariesUseCaseProtocol) {
-        self.getProductSummariesUseCase = getProductSummariesUseCase
+    init() {
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -15,29 +21,45 @@ final class ProductsListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        
-        let button = UIButton(type: .system)
-        button.addTarget(self, action: #selector(navigate), for: .touchUpInside)
-        button.setTitle("navigate", for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(button)
-        NSLayoutConstraint.activate([
-            button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            button.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-        ])
-        
-        getProductSummariesUseCase.execute { result in
-            switch result {
-            case .success(let summaries):
-                print(summaries)
-            case .failure(let error):
-                print(error)
-            }
-        }
+        view.backgroundColor = Colors.backgroundSecondary
+        view.addSubview(tableView)
+        tableView.fillSuperview()
+        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+    }
+}
+
+// MARK: - UITableViewDataSource
+
+extension ProductsListViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        5
     }
     
-    @objc private func navigate() {
-        responder?.navigateToProductDetails()
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoColumnTableViewCell.reuseIdentifier) as? TwoColumnTableViewCell else {
+            return UITableViewCell()
+        }
+        let config = TwoColumnTableViewCell.Configuration(
+            primaryText: "A09292",
+            secondaryText: Strings.Products.Summaries.transactions(245),
+            showsDisclosureIndicator: true
+        )
+        cell.configure(with: config)
+        return cell
     }
+}
+
+// MARK: - UITableViewDelegate
+
+extension ProductsListViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        44
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+
 }
