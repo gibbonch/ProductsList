@@ -1,3 +1,3 @@
 protocol ProductListNavigationResponder: AnyObject {
-    func navigateToProductDetails()
+    func navigateToProductDetails(with sku: Sku)
 }

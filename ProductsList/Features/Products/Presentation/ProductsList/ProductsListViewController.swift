@@ -1,30 +1,51 @@
 import UIKit
+import Combine
 
 final class ProductsListViewController: UIViewController {
     
-    private lazy var tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(TwoColumnTableViewCell.self, forCellReuseIdentifier: TwoColumnTableViewCell.reuseIdentifier)
-        tableView.backgroundColor = .clear
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        return tableView
+    private let viewModel: ProductsListViewModelProtocol
+    private var summaries: [ProductSummaryUIModel] = []
+    
+    private lazy var productsListView: ProductsListView = {
+        let view = ProductsListView()
+        view.tableViewDataSource = self
+        view.tableViewDelegate = self
+        return view
     }()
     
-    init() {
+    private var cancellables: Set<AnyCancellable> = []
+        
+    init(viewModel: ProductsListViewModelProtocol) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
     @available(*, unavailable)
     required init?(coder: NSCoder) { fatalError() }
     
+    override func loadView() {
+        view = productsListView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = Colors.backgroundSecondary
-        view.addSubview(tableView)
-        tableView.fillSuperview()
-        tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        setupNavigationBar()
+        bindViewModel()
+        viewModel.viewLoaded()
+    }
+    
+    private func setupNavigationBar() {
+        title = Strings.Products.Summaries.title
+        navigationController?.navigationBar.tintColor = Colors.accentBlue
+    }
+    
+    private func bindViewModel() {
+        viewModel.summaries
+            .sink { [weak self] summaries in
+                self?.summaries = summaries
+                self?.productsListView.reloadData()
+            }
+            .store(in: &cancellables)
     }
 }
 
@@ -33,19 +54,15 @@ final class ProductsListViewController: UIViewController {
 extension ProductsListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        5
+        summaries.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoColumnTableViewCell.reuseIdentifier) as? TwoColumnTableViewCell else {
             return UITableViewCell()
         }
-        let config = TwoColumnTableViewCell.Configuration(
-            primaryText: "A09292",
-            secondaryText: Strings.Products.Summaries.transactions(245),
-            showsDisclosureIndicator: true
-        )
-        cell.configure(with: config)
+        let summary = summaries[indexPath.row]
+        cell.configure(with: summary)
         return cell
     }
 }
@@ -60,6 +77,10 @@ extension ProductsListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        viewModel.cellSelected(at: indexPath)
     }
-
 }
+
+// MARK: - Typealias
+
+typealias ProductSummaryUIModel = TwoColumnTableViewCell.Configuration
