@@ -10,6 +10,7 @@ enum TransactionMapper {
     
     static func mapToDomain(dto: TransactionDTO) -> Transaction? {
         guard let value = Multiplier(dto.amount),
+              !dto.sku.isEmpty,
               NSLocale.isoCurrencyCodes.contains(dto.currency) else {
             return nil
         }
