@@ -28,3 +28,4 @@ final class MockCurrencyConverter: CurrencyConverterProtocol {
         return mockConvertedAmount ?? Amount(value: amount.value, code: currency)
     }
 }
+

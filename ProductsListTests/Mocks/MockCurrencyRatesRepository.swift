@@ -16,3 +16,4 @@ final class MockCurrencyRatesRepository: CurrencyRatesRepositoryProtocol {
         return .success(mockCurrencyRates)
     }
 }
+
