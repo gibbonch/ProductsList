@@ -10,7 +10,7 @@ final class CurrencyRatesRepository: CurrencyRatesRepositoryProtocol {
     
     init(plistReader: PlistReaderProtocol = PlistReader()) {
         self.plistReader = plistReader
-        initializeData()
+        loadRates()
     }
     
     func fetchCurrencyRates() -> Result<[CurrencyRate], Error> {
@@ -20,7 +20,7 @@ final class CurrencyRatesRepository: CurrencyRatesRepositoryProtocol {
         return .success(currencyRates)
     }
     
-    private func initializeData() {
+    private func loadRates() {
         do {
             let rateDTOs = try plistReader.read(file: Self.file, as: [CurrencyRateDTO].self)
             let rates = rateDTOs.compactMap { dto in

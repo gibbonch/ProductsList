@@ -26,7 +26,7 @@ final class CurrencyConverterTests: XCTestCase {
     
     // MARK: - Tests
     
-    func testConvert_convertsWhenHasDirectRate() {
+    func testConvert_returnsCorrectAmount_whenHasDirectRate() {
         // Given
         let value = 1.0
         let multiplier = 0.77
@@ -44,7 +44,7 @@ final class CurrencyConverterTests: XCTestCase {
         XCTAssertEqual(resultAmount?.value, expectedValue)
     }
     
-    func testConvert_convertsUsingCrossRate() {
+    func testConvert_returnsCorrectAmount_whenHasCrossRatePath() {
         // Given
         let value = 1.0
         let multiplierToCrossRate = 0.77
@@ -65,7 +65,7 @@ final class CurrencyConverterTests: XCTestCase {
         XCTAssertEqual(resultAmount?.value, expectedValue)
     }
     
-    func testConvert_returnsSameAmountWhenConvertingToSameCurrency() {
+    func testConvert_returnsSameAmount_whenConvertingToSameCurrency() {
         // Given
         let value = 1.0
         let amount = Amount(value: value, code: to)
@@ -79,12 +79,12 @@ final class CurrencyConverterTests: XCTestCase {
         XCTAssertEqual(resultAmount?.value, value)
     }
     
-    func testConvert_failsWhenHasNotCrossRate() {
+    func testConvert_throwsError_whenHasNotCrossRatePath() {
         let amount = Amount(value: 1.0, code: from)
         XCTAssertThrowsError(try sut.convert(from: amount, to: to))
     }
     
-    func testConvert_failsWhenInvalidAmount() {
+    func testConvert_throwsError_whenInvalidAmount() {
         let invalidAmount = Amount(value: -1.0, code: from)
         XCTAssertThrowsError(try sut.convert(from: invalidAmount, to: to))
     }

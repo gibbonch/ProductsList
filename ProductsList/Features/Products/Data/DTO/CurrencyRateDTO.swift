@@ -10,6 +10,7 @@ enum CurrencyRateMapper {
     
     static func mapToDomain(dto: CurrencyRateDTO) -> CurrencyRate? {
         guard let multiplier = Multiplier(dto.rate),
+              multiplier >= 0,
               NSLocale.isoCurrencyCodes.contains(dto.from),
               NSLocale.isoCurrencyCodes.contains(dto.to) else {
             return nil

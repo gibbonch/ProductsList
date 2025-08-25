@@ -10,7 +10,7 @@ final class TransactionsRepository: TransactionsRepositoryProtocol {
     
     init(plistReader: PlistReaderProtocol = PlistReader()) {
         self.plistReader = plistReader
-        initializeData()
+        loadTransactions()
     }
     
     func fetchAllTransactions() -> Result<[Transaction], any Error> {
@@ -33,7 +33,7 @@ final class TransactionsRepository: TransactionsRepositoryProtocol {
         return .success(filteredTransactions)
     }
     
-    private func initializeData() {
+    private func loadTransactions() {
         do {
             let transactionsDTOs = try plistReader.read(file: Self.file, as: [TransactionDTO].self)
             let mappedTransactions = transactionsDTOs.compactMap { dto in
